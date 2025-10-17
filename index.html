@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Product Total Calculator</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f0f0f0;
+    }
+    #total {
+      text-align: center;
+      font-size: 2em;
+      padding: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div id="total">Loading...</div>
+
+  <script>
+    window.onload = function() {
+      var total = 0;
+      fetch('products.csv')
+        .then(response => response.text())
+        .then(data => {
+          var lines = data.split('\n');
+          for(var i = 1; i < lines.length; i++) {
+            var line = lines[i].split(',');
+            var price = parseFloat(line[1]);
+            if(!isNaN(price)) total += price;
+          }
+          document.getElementById('total').innerHTML = 'Total: ' + total.toFixed(2);
+        })
+        .catch(error => {
+          console.error('Error:', error);
+          document.getElementById('total').innerHTML = 'Error loading file';
+        });
+    };
+  </script>
+</body>
+</html>
